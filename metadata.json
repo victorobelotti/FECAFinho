@@ -1,0 +1,8 @@
+{
+  "name": "FECAFinho: Totem Inteligente UniFECAF",
+  "description": "Assistente inteligente para navegação no campus e suporte ao aluno da UniFECAF, com interface intuitiva, chat inteligente e mapas interativos.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": []
+}
