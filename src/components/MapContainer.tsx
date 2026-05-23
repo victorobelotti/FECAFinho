@@ -139,97 +139,129 @@ export const MapContainer: React.FC = () => {
       "flex-1 relative overflow-hidden flex flex-col transition-all duration-500",
       isDarkMode ? "bg-slate-900" : "bg-slate-50"
     )}>
-      {/* Top Header - Unified Label & Info Panel */}
-      <div className="absolute top-10 left-10 right-10 z-50 flex justify-between items-center pointer-events-none">
-        <div className="space-y-2 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-fecaf-green animate-ping" />
-            <h3 className={`text-sm font-black uppercase tracking-[0.3em] transition-colors duration-500 ${isDarkMode ? "text-slate-500" : "text-slate-400"}`}>Smart Building Live</h3>
+      {/* Top Header - Unified Label & Floor Control - Responsive Flow */}
+      <div className={cn(
+        "shrink-0 z-40 flex flex-col xl:flex-row xl:justify-between xl:items-center gap-4 p-4 md:p-6 border-b pointer-events-auto transition-all duration-500",
+        isDarkMode ? "bg-slate-950/40 border-slate-800/80" : "bg-white/40 border-slate-100"
+      )}>
+        {/* Title and Badge Column */}
+        <div className="flex flex-col gap-1 md:gap-2">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-fecaf-green animate-ping animate-duration-1000" />
+            <h3 className={`text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.3em] transition-colors duration-500 ${isDarkMode ? "text-slate-500" : "text-slate-400"}`}>Smart Building Live</h3>
           </div>
-          <h4 className={`text-4xl font-black tracking-tight italic transition-colors duration-500 ${
+          <h4 className={`text-xl md:text-3xl lg:text-4xl font-black tracking-tight italic transition-colors duration-500 leading-tight ${
             isDarkMode ? "text-slate-100" : "text-slate-800"
           }`}>
             {currentFloor === 0 ? 'Pavimento Térreo' : `Planta Subsolo -0${currentFloor}`}
           </h4>
         </div>
 
-        {/* Info Panel - Compact Header Style */}
-        <AnimatePresence>
-          {selectedNodeId && (
-            <motion.div
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 50, opacity: 0 }}
-              className={cn(
-                "flex-1 max-w-4xl h-24 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.06)] rounded-[32px] p-4 flex items-center gap-8 pointer-events-auto ml-12 transition-all duration-500 border",
-                isDarkMode ? "bg-slate-950/90 border-slate-800 text-white" : "bg-white/90 border-slate-100 text-slate-800"
-              )}
-            >
+        {/* Floor Control (Níveis) - Integrated in flow to never collide! */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className={`text-[10px] md:text-xs font-black uppercase tracking-wider ${
+            isDarkMode ? "text-slate-500" : "text-slate-400"
+          }`}>Pavimentos Campus</span>
+          
+          <div className={cn(
+            "flex items-center gap-1.5 p-1 rounded-2xl transition-all duration-500 border flex-wrap",
+            isDarkMode ? "bg-slate-900/40 border-slate-800" : "bg-slate-100/50 border-slate-200"
+          )}>
+            {[2, 1, 0].map((f) => (
+              <button
+                key={f}
+                onClick={() => setFloor(f)}
+                className={cn(
+                  "px-3.5 py-2 rounded-xl font-black text-xs transition-all duration-300 flex items-center justify-center min-w-[50px] shadow-sm select-none",
+                  currentFloor === f 
+                    ? (isDarkMode ? "bg-fecaf-green text-white shadow-md scale-105" : "bg-fecaf-blue text-white shadow-md scale-105") 
+                    : (isDarkMode ? "text-slate-400 hover:bg-slate-800 hover:text-slate-200" : "text-slate-500 hover:bg-white hover:text-slate-800")
+                )}
+              >
+                {f === 0 ? 'Térreo' : `S${f}`}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Selected Node Info Panel - Responsive Flow */}
+      <AnimatePresence>
+        {selectedNodeId && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="shrink-0 overflow-hidden border-b border-slate-100 dark:border-slate-800/50"
+          >
+            <div className={cn(
+              "p-4 md:p-6 flex flex-col md:flex-row items-stretch md:items-center gap-4 justify-between transition-all duration-500",
+              isDarkMode ? "bg-slate-950/20 text-white" : "bg-white/50 text-slate-800"
+            )}>
               {/* Identity Section */}
-              <div className={`flex items-center gap-4 min-w-[200px] border-r pr-4 transition-colors duration-500 ${isDarkMode ? "border-slate-800" : "border-slate-100"}`}>
-                <div className="w-1.5 h-10 bg-fecaf-green rounded-full shrink-0" />
+              <div className="flex items-center gap-3 shrink-0">
+                <div className="w-1 h-8 bg-fecaf-green rounded-full shrink-0" />
                 <div className="flex flex-col text-left">
-                  <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-colors duration-500 ${isDarkMode ? "text-slate-500" : "text-slate-300"}`}>Nível {currentFloor === 0 ? 'Térreo' : `S${currentFloor}`}</span>
-                  <h4 className={`text-lg font-black tracking-tight leading-tight truncate max-w-[160px] transition-colors duration-500 ${isDarkMode ? "text-slate-100" : "text-fecaf-blue"}`}>
+                  <span className={`text-[8px] font-black uppercase tracking-[0.15em] ${isDarkMode ? "text-slate-500" : "text-slate-400"}`}>Nível {currentFloor === 0 ? 'Térreo' : `S${currentFloor}`}</span>
+                  <h4 className="text-base md:text-lg font-black tracking-tight leading-tight">
                     {CAMPUS_NODES.find(n => n.id === selectedNodeId)?.name}
                   </h4>
                 </div>
               </div>
 
-              {/* Description & Metrics */}
-              <div className="flex-1 flex items-center gap-6">
-                <p className={`text-[10px] font-bold italic line-clamp-2 flex-1 border-r pr-6 transition-all duration-500 ${
-                  isDarkMode ? "text-slate-400 border-slate-800" : "text-slate-500 border-slate-100"
-                }`}>
-                  "{CAMPUS_NODES.find(n => n.id === selectedNodeId)?.description || 'Espaço de alta performance.'}"
-                </p>
+              {/* Description */}
+              <p className={`text-[11px] font-bold italic line-clamp-2 md:flex-1 md:mx-6 ${
+                isDarkMode ? "text-slate-400" : "text-slate-500"
+              }`}>
+                "{CAMPUS_NODES.find(n => n.id === selectedNodeId)?.description || 'Espaço de alta performance.'}"
+              </p>
 
-                <div className={`flex items-center gap-6 shrink-0 border-r pr-6 transition-all duration-500 ${
-                  isDarkMode ? "border-slate-800" : "border-slate-100"
-                }`}>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-fecaf-blue" />
-                    <span className={`text-xs font-black uppercase italic transition-colors duration-500 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}>~2 MIN</span>
+              {/* Metrics and Actions */}
+              <div className="flex items-center gap-4 flex-wrap md:flex-nowrap shrink-0">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-fecaf-blue" />
+                    <span className="text-[11px] font-black uppercase italic">~2 MIN</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Footprints className="w-4 h-4 text-fecaf-green" />
-                    <span className={`text-xs font-black uppercase italic transition-colors duration-500 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}>~150</span>
+                  <div className="flex items-center gap-1.5">
+                    <Footprints className="w-3.5 h-3.5 text-fecaf-green" />
+                    <span className="text-[11px] font-black uppercase italic">~150</span>
                   </div>
                 </div>
-              </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-4 shrink-0 relative pr-2">
-                <button 
-                  onClick={() => setView?.('chat' as any)}
-                  className="bg-fecaf-blue text-white px-6 h-12 rounded-xl font-black uppercase tracking-widest text-[9px] flex items-center gap-2 shadow-lg shadow-fecaf-blue/20 hover:scale-105 active:scale-95 transition-all"
-                >
-                  <Navigation className="w-4 h-4" />
-                  Guia Assistido
-                </button>
-                
-                <button 
-                  onClick={() => {
-                    selectNode(null);
-                    setNavigationPath(null);
-                  }}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all border ${
-                    isDarkMode 
-                      ? "bg-slate-800 text-slate-400 border-slate-700 hover:text-rose-400 hover:bg-slate-700" 
-                      : "bg-slate-50 text-slate-400 border-slate-100 hover:text-rose-500 hover:bg-rose-50"
-                  }`}
-                  aria-label="Fechar detalhes"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-2 min-w-0">
+                  <button 
+                    onClick={() => setView?.('chat' as any)}
+                    className="justify-center bg-fecaf-blue text-white px-4 py-2.5 rounded-xl font-black uppercase tracking-widest text-[9px] flex items-center gap-1.5 shadow-md shadow-fecaf-blue/20 hover:scale-105 active:scale-95 transition-all text-center whitespace-nowrap animation-pulse"
+                  >
+                    <Navigation className="w-3.5 h-3.5" />
+                    Guia Assistido
+                  </button>
+                  
+                  <button 
+                    onClick={() => {
+                      selectNode(null);
+                      setNavigationPath(null);
+                    }}
+                    className={cn(
+                      "w-9 h-9 rounded-full flex items-center justify-center transition-all border shrink-0",
+                      isDarkMode 
+                        ? "bg-slate-800 text-slate-400 border-slate-700 hover:text-rose-400 hover:bg-slate-700" 
+                        : "bg-slate-50 text-slate-400 border-slate-100 hover:text-rose-500 hover:bg-rose-50"
+                    )}
+                    aria-label="Fechar detalhes"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Map Content */}
-      <div className="flex-1 relative flex items-center justify-center p-6 pt-24 pb-8 overflow-hidden transition-all duration-700">
+      {/* Map Content - Freed from absolute overlays */}
+      <div className="flex-1 relative flex items-center justify-center p-6 pb-8 overflow-hidden transition-all duration-700">
         <div className={`absolute inset-0 transition-opacity duration-500 pointer-events-none bg-pattern ${
           isDarkMode ? "opacity-[0.01]" : "opacity-[0.03]"
         }`} />
@@ -242,7 +274,7 @@ export const MapContainer: React.FC = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className={cn(
-            "relative max-w-full max-h-full aspect-[16/10] w-full h-auto rounded-[64px] border-2 border-dashed overflow-hidden flex items-center justify-center transition-all duration-500 group/map",
+            "relative max-w-full max-h-full aspect-[16/10] w-full h-auto object-contain rounded-[64px] border-2 border-dashed overflow-hidden flex items-center justify-center transition-all duration-500 group/map",
             isDarkMode 
               ? "bg-slate-950 border-slate-800 shadow-[inset_0_4px_30px_rgba(0,0,0,0.5),0_40px_100px_rgba(0,0,0,0.7)]" 
               : "bg-white border-slate-200 shadow-[inset_0_4px_30px_rgba(0,0,0,0.02),0_40px_100px_rgba(0,0,0,0.05)]"
@@ -436,30 +468,6 @@ export const MapContainer: React.FC = () => {
             );
           })}
         </motion.div>
-
-        {/* Floor Control */}
-        <div className={cn(
-          "absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-2 p-3 rounded-full transition-all duration-500 border",
-          isDarkMode ? "bg-slate-900/90 border-slate-800 shadow-xl text-white" : "glass-panel"
-        )}>
-          <div className={`text-[9px] font-black uppercase text-center mb-2 px-2 ${
-            isDarkMode ? "text-slate-500" : "text-slate-300"
-          }`}>Level</div>
-          {[2, 1, 0].map((f) => (
-            <button
-              key={f}
-              onClick={() => setFloor(f)}
-              className={cn(
-                "w-12 h-12 rounded-full font-black text-sm transition-all duration-300 flex items-center justify-center",
-                currentFloor === f 
-                  ? (isDarkMode ? "bg-fecaf-green text-white shadow-xl scale-110" : "bg-fecaf-blue text-white shadow-xl scale-110") 
-                  : (isDarkMode ? "text-slate-400 hover:bg-slate-800 hover:text-slate-200" : "text-slate-400 hover:bg-slate-50")
-              )}
-            >
-              {f === 0 ? 'T' : `S${f}`}
-            </button>
-          ))}
-        </div>
       </div>
     </div>
   );

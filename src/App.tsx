@@ -28,10 +28,11 @@ export default function App() {
     }`}>
       <Header />
       
-      <div className="flex flex-1 overflow-hidden">
+      {/* Responsive layout: stacks on mobile (flex-col), row on desktop (md:flex-row) */}
+      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
         <Sidebar />
         
-        <main className="flex-1 flex overflow-hidden">
+        <main className="flex-1 flex overflow-hidden relative">
           <AnimatePresence mode="wait">
           {view === 'map' && (
             <motion.div
@@ -39,10 +40,14 @@ export default function App() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="flex-1 flex overflow-hidden"
+              className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden h-full w-full"
             >
-              <MapContainer />
-              <ChatInterface />
+              <div className="col-span-1 lg:col-span-8 flex flex-col overflow-hidden h-full relative">
+                <MapContainer />
+              </div>
+              <div className="hidden lg:block lg:col-span-4 overflow-hidden h-full">
+                <ChatInterface />
+              </div>
             </motion.div>
           )}
 
@@ -52,17 +57,21 @@ export default function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="flex-1 flex justify-center items-stretch bg-white"
+              className="flex-1 grid grid-cols-1 lg:grid-cols-12 items-stretch bg-white dark:bg-slate-950 transition-colors duration-500 overflow-hidden h-full w-full"
             >
-               <ChatInterface />
-               <div className="flex-1 bg-slate-50/50 flex items-center justify-center p-20">
+               <div className="col-span-1 lg:col-span-5 xl:col-span-4 h-full overflow-hidden flex flex-col">
+                 <ChatInterface />
+               </div>
+               
+               {/* Hidden on mobile/tablets to avoid crouched lists or double panels */}
+               <div className="hidden lg:flex lg:col-span-7 xl:col-span-8 bg-slate-50/50 dark:bg-slate-900/10 flex-col items-center justify-center p-20">
                   <div className="max-w-md text-center">
                     <div className="w-40 h-40 mx-auto rounded-full flex items-center justify-center mb-8 relative">
                       <div className="absolute inset-0 bg-fecaf-blue/10 blur-2xl rounded-full" />
                       <MascotIllustration className="w-40 h-40 drop-shadow-2xl relative z-10" />
                     </div>
-                    <h2 className="text-3xl font-black text-slate-800 mb-4 tracking-tight">Deseja navegar pelo Mapa?</h2>
-                    <p className="text-slate-500 font-medium mb-8">
+                    <h2 className="text-3xl font-black text-slate-800 dark:text-slate-100 mb-4 tracking-tight">Deseja navegar pelo Mapa?</h2>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium mb-8">
                       O Fecafinho pode te guiar para qualquer sala ou laboratório. Clique no ícone do mapa no menu lateral para visualizar o campus.
                     </p>
                     <button 
