@@ -10,6 +10,7 @@ import { Sidebar } from './components/Sidebar';
 import { MapContainer } from './components/MapContainer';
 import { ChatInterface } from './components/ChatInterface';
 import { AdminPortal } from './components/AdminPortal';
+import { PresentationSlides } from './components/PresentationSlides';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { Header } from './components/Header';
@@ -23,7 +24,7 @@ export default function App() {
   }
 
   return (
-    <div className={`flex flex-col h-screen overflow-hidden font-sans transition-colors duration-500 ${
+    <div className={`flex flex-col h-screen h-[100dvh] overflow-hidden font-sans transition-colors duration-500 ${
       isDarkMode ? "bg-slate-950 text-slate-100" : "bg-fecaf-bg text-slate-900"
     }`}>
       <Header />
@@ -94,6 +95,18 @@ export default function App() {
               className="flex-1"
             >
               <AdminPortal />
+            </motion.div>
+          )}
+
+          {view === 'slides' && (
+            <motion.div
+              key="slides"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="flex-1"
+            >
+              <PresentationSlides />
             </motion.div>
           )}
 

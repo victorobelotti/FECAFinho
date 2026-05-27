@@ -260,12 +260,17 @@ export const MapContainer: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Map Content - Freed from absolute overlays */}
-      <div className="flex-1 relative flex items-center justify-center p-6 pb-8 overflow-hidden transition-all duration-700">
+      {/* Map Content - Freed from absolute overlays - Responsive Flex & Overflow Scrolling */}
+      <div className="flex-1 relative flex items-center justify-start sm:justify-center p-3 sm:p-6 pb-6 sm:pb-8 overflow-x-auto sm:overflow-hidden transition-all duration-700 select-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <div className={`absolute inset-0 transition-opacity duration-500 pointer-events-none bg-pattern ${
           isDarkMode ? "opacity-[0.01]" : "opacity-[0.03]"
         }`} />
         
+        {/* Mobile Swipe Assist badge */}
+        <div className="absolute right-4 bottom-4 z-40 bg-slate-900/80 dark:bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-700/50 flex items-center gap-2 text-[10px] font-black uppercase text-white shadow-lg pointer-events-none sm:hidden">
+          <span className="animate-pulse">Deslize ↔</span>
+        </div>
+
         <motion.div 
           animate={{ 
             scale: mapScaleFactor,
@@ -274,7 +279,7 @@ export const MapContainer: React.FC = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className={cn(
-            "relative max-w-full max-h-full aspect-[16/10] w-full h-auto object-contain rounded-[64px] border-2 border-dashed overflow-hidden flex items-center justify-center transition-all duration-500 group/map",
+            "relative max-w-full max-h-full aspect-[16/10] w-[625px] sm:w-full shrink-0 rounded-[32px] sm:rounded-[64px] border-2 border-dashed overflow-hidden flex items-center justify-center transition-all duration-500 group/map",
             isDarkMode 
               ? "bg-slate-950 border-slate-800 shadow-[inset_0_4px_30px_rgba(0,0,0,0.5),0_40px_100px_rgba(0,0,0,0.7)]" 
               : "bg-white border-slate-200 shadow-[inset_0_4px_30px_rgba(0,0,0,0.02),0_40px_100px_rgba(0,0,0,0.05)]"
@@ -395,8 +400,8 @@ export const MapContainer: React.FC = () => {
                 <div className="absolute -inset-6 rounded-full pointer-events-auto" />
                 
                 <div className={cn(
-                   "rounded-2xl border flex flex-col items-center justify-center p-2 text-center transition-all duration-500",
-                   mapScaleFactor < 0.9 ? "w-16 h-16" : "w-20 h-20",
+                   "rounded-xl sm:rounded-2xl border flex flex-col items-center justify-center p-1 sm:p-2 text-center transition-all duration-500",
+                   mapScaleFactor < 0.9 ? "w-12 h-12 sm:w-16 sm:h-16" : "w-14 h-14 sm:w-20 sm:h-20",
                    isTotem 
                      ? "bg-fecaf-green border-white shadow-[0_15px_40px_rgba(0,168,89,0.4)] ring-4 ring-white/30"
                      : (isDestination 
@@ -420,20 +425,20 @@ export const MapContainer: React.FC = () => {
                     <motion.div 
                       animate={{ y: [0, -5, 0] }}
                       transition={{ repeat: Infinity, duration: 2 }}
-                      className="mb-1"
+                      className="mb-0.5 sm:mb-1"
                     >
-                      <Navigation className="w-6 h-6 text-white fill-white rotate-45" />
+                      <Navigation className="w-4 h-4 sm:w-6 sm:h-6 text-white fill-white rotate-45" />
                     </motion.div>
                   )}
 
                   <div className={cn(
-                    "text-[7px] uppercase font-black mb-1 tracking-widest",
+                    "text-[6.5px] sm:text-[7px] uppercase font-black mb-0.5 sm:mb-1 tracking-widest",
                     isTotem || isDestination ? "text-white/50" : (isDarkMode ? "text-slate-500" : "text-slate-400")
                   )}>
                     {isTotem ? "Totem" : node.type}
                   </div>
                   <div className={cn(
-                    "text-[9px] font-black break-words w-full leading-tight uppercase",
+                    "text-[7px] sm:text-[9px] font-black break-words w-full leading-tight uppercase",
                     isTotem || isDestination ? "text-white" : (isDarkMode ? "text-slate-100" : "text-slate-800")
                   )}>
                     {node.name}
@@ -444,11 +449,12 @@ export const MapContainer: React.FC = () => {
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       className={cn(
-                        "mt-1.5 px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-tighter",
+                        "mt-1 sm:mt-1.5 px-1 sm:px-2 py-0.5 rounded-full text-[5px] sm:text-[7px] font-black uppercase tracking-tighter",
                         isTotem ? "bg-white text-fecaf-green" : "bg-fecaf-green text-white"
                       )}
                     >
-                      {isTotem ? "Ponto de Partida" : "Destino Final"}
+                      <span className="hidden sm:inline">{isTotem ? "Ponto de Partida" : "Destino Final"}</span>
+                      <span className="inline sm:hidden">{isTotem ? "Partida" : "Destino"}</span>
                     </motion.div>
                   )}
                 </div>

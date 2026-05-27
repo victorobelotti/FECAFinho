@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Map, MessageSquare, Power, Settings, Sun, Moon } from 'lucide-react';
+import { Map, MessageSquare, Power, Settings, Sun, Moon, Presentation } from 'lucide-react';
 import { useCampusStore } from '../store/useCampusStore';
 import { cn } from '../lib/utils';
 
@@ -10,6 +10,7 @@ export const Sidebar: React.FC = () => {
   const items = [
     { id: 'map', icon: Map, label: 'Mapa' },
     { id: 'chat', icon: MessageSquare, label: 'Chat' },
+    { id: 'slides', icon: Presentation, label: 'Slides' },
   ];
 
   return (

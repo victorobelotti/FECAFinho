@@ -22,7 +22,7 @@ interface CampusState {
   selectedNodeId: string | null;
   navigationPath: string[] | null;
   isTotemActive: boolean;
-  view: 'welcome' | 'map' | 'admin' | 'chat' | 'nodes' | 'profile';
+  view: 'welcome' | 'map' | 'admin' | 'chat' | 'nodes' | 'profile' | 'slides';
   userQuery: string;
   isDarkMode: boolean;
   
@@ -30,7 +30,7 @@ interface CampusState {
   selectNode: (id: string | null) => void;
   setNavigationPath: (path: string[] | null) => void;
   activateTotem: () => void;
-  setView: (view: 'welcome' | 'map' | 'admin' | 'chat' | 'nodes' | 'profile') => void;
+  setView: (view: 'welcome' | 'map' | 'admin' | 'chat' | 'nodes' | 'profile' | 'slides') => void;
   setUserQuery: (query: string) => void;
   toggleDarkMode: () => void;
 }
