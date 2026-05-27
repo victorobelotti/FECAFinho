@@ -22,7 +22,7 @@ interface CampusState {
   selectedNodeId: string | null;
   navigationPath: string[] | null;
   isTotemActive: boolean;
-  view: 'welcome' | 'map' | 'admin' | 'chat' | 'nodes' | 'profile' | 'slides';
+  view: 'welcome' | 'map' | 'admin' | 'chat' | 'nodes' | 'profile';
   userQuery: string;
   isDarkMode: boolean;
   
@@ -30,7 +30,8 @@ interface CampusState {
   selectNode: (id: string | null) => void;
   setNavigationPath: (path: string[] | null) => void;
   activateTotem: () => void;
-  setView: (view: 'welcome' | 'map' | 'admin' | 'chat' | 'nodes' | 'profile' | 'slides') => void;
+  deactivateTotem: () => void;
+  setView: (view: 'welcome' | 'map' | 'admin' | 'chat' | 'nodes' | 'profile') => void;
   setUserQuery: (query: string) => void;
   toggleDarkMode: () => void;
 }
@@ -54,6 +55,7 @@ export const useCampusStore = create<CampusState>((set) => ({
   selectNode: (id) => set({ selectedNodeId: id }),
   setNavigationPath: (path) => set({ navigationPath: path }),
   activateTotem: () => set({ isTotemActive: true, view: 'map' }),
+  deactivateTotem: () => set({ isTotemActive: false, view: 'welcome', selectedNodeId: null, navigationPath: null, userQuery: '' }),
   setView: (view) => set({ view: view }),
   setUserQuery: (query) => set({ userQuery: query }),
   toggleDarkMode: () => set((state) => {

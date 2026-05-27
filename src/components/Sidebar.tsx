@@ -1,16 +1,15 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Map, MessageSquare, Power, Settings, Sun, Moon, Presentation } from 'lucide-react';
+import { Map, MessageSquare, Power, Settings, Sun, Moon } from 'lucide-react';
 import { useCampusStore } from '../store/useCampusStore';
 import { cn } from '../lib/utils';
 
 export const Sidebar: React.FC = () => {
-  const { view, setView, isDarkMode, toggleDarkMode } = useCampusStore();
+  const { view, setView, deactivateTotem, isDarkMode, toggleDarkMode } = useCampusStore();
 
   const items = [
     { id: 'map', icon: Map, label: 'Mapa' },
     { id: 'chat', icon: MessageSquare, label: 'Chat' },
-    { id: 'slides', icon: Presentation, label: 'Slides' },
   ];
 
   return (
@@ -25,7 +24,7 @@ export const Sidebar: React.FC = () => {
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        onClick={() => setView('welcome')}
+        onClick={deactivateTotem}
         className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-rose-500/20 text-rose-100 flex items-center justify-center border border-rose-500/30 shadow-lg md:mb-4 shrink-0"
         title="Encerrar Sessão"
       >

@@ -83,7 +83,7 @@ export const MapContainer: React.FC = () => {
     if (totemIndex !== -1) {
       adjustedNodes[totemIndex] = {
         ...adjustedNodes[totemIndex],
-        x: 50,
+        x: 60,
         y: 100 - safePadding - (cardSizePercent / 2) // Pinned to bottom safety margin
       };
     }
@@ -279,7 +279,7 @@ export const MapContainer: React.FC = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className={cn(
-            "relative max-w-full max-h-full aspect-[16/10] w-[625px] sm:w-full shrink-0 rounded-[32px] sm:rounded-[64px] border-2 border-dashed overflow-hidden flex items-center justify-center transition-all duration-500 group/map",
+            "relative max-w-full max-h-full aspect-[16/10] w-[625px] sm:w-full md:w-auto md:h-full md:max-h-[72%] lg:w-full lg:h-auto shrink-0 md:shrink lg:shrink-0 rounded-[32px] sm:rounded-[64px] border-2 border-dashed overflow-hidden flex items-center justify-center transition-all duration-500 group/map",
             isDarkMode 
               ? "bg-slate-950 border-slate-800 shadow-[inset_0_4px_30px_rgba(0,0,0,0.5),0_40px_100px_rgba(0,0,0,0.7)]" 
               : "bg-white border-slate-200 shadow-[inset_0_4px_30px_rgba(0,0,0,0.02),0_40px_100px_rgba(0,0,0,0.05)]"

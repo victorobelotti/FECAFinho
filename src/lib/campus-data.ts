@@ -37,7 +37,7 @@ export const CAMPUS_NODES: MapNode[] = [
   { id: 'sub2-42', name: 'Área Gamer', type: 'service', floor: 2, x: 20, y: 20, description: 'Espaço de lazer e gaming do campus' },
   { id: 'sub2-45', name: 'Sala 10', type: 'room', floor: 2, x: 50, y: 20, description: 'Capacidade: 60 alunos' },
   { id: 'sub2-53', name: 'Estacionamento', type: 'service', floor: 2, x: 50, y: 85, description: 'Acesso privativo e vagas rotativas' },
-  { id: 'totem-base', name: 'Ponto de Partida', type: 'service', floor: 0, x: 50, y: 92, description: 'Totem de Atendimento UniFECAF' },
+  { id: 'totem-base', name: 'Ponto de Partida', type: 'service', floor: 0, x: 60, y: 92, description: 'Totem de Atendimento UniFECAF' },
 ];
 
 export const CAMPUS_EDGES: MapEdge[] = [
