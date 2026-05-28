@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { useCampusStore } from './store/useCampusStore';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { Sidebar } from './components/Sidebar';
@@ -112,6 +113,7 @@ export default function App() {
         </AnimatePresence>
       </main>
       </div>
+      <Analytics />
     </div>
   );
 }
