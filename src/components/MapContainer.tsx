@@ -83,7 +83,7 @@ export const MapContainer: React.FC = () => {
     if (totemIndex !== -1) {
       adjustedNodes[totemIndex] = {
         ...adjustedNodes[totemIndex],
-        x: 60,
+        x: 68,
         y: 100 - safePadding - (cardSizePercent / 2) // Pinned to bottom safety margin
       };
     }
@@ -94,9 +94,9 @@ export const MapContainer: React.FC = () => {
   // Task 2: Esconamento Automático logic
   const mapScaleFactor = React.useMemo(() => {
     const nodeCount = floorNodes.length;
-    if (nodeCount > 12) return 0.85;
-    if (nodeCount > 8) return 0.92;
-    return 1;
+    if (nodeCount > 12) return 0.92;
+    if (nodeCount > 8) return 1.00;
+    return 1.08;
   }, [floorNodes]);
 
   const handleNodeClick = (nodeId: string) => {
@@ -132,6 +132,26 @@ export const MapContainer: React.FC = () => {
       )
       .map(n => `${n.x},${n.y}`)
       .join(" L ");
+  };
+
+  // Helper to get array of coordinate points for animating elements
+  const getPathPoints = () => {
+    if (!navigationPath) return [];
+    
+    const adjustedPosMap = new Map<string, { x: number; y: number }>(floorNodes.map(n => [n.id, { x: n.x, y: n.y }]));
+    
+    const pathNodes = navigationPath.map(id => {
+      const adjusted = adjustedPosMap.get(id);
+      if (adjusted) return { x: adjusted.x, y: adjusted.y, floor: currentFloor };
+      
+      const original = CAMPUS_NODES.find(n => n.id === id);
+      return original ? { x: original.x, y: original.y, floor: original.floor } : null;
+    });
+
+    return pathNodes
+      .filter((n): n is { x: number; y: number, floor: number } => 
+        n !== null && (n.floor === currentFloor)
+      );
   };
 
   return (
@@ -279,7 +299,7 @@ export const MapContainer: React.FC = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className={cn(
-            "relative max-w-full max-h-full aspect-[16/10] w-[625px] sm:w-full md:w-auto md:h-full md:max-h-[72%] lg:w-full lg:h-auto shrink-0 md:shrink lg:shrink-0 rounded-[32px] sm:rounded-[64px] border-2 border-dashed overflow-hidden flex items-center justify-center transition-all duration-500 group/map",
+            "relative max-w-full max-h-full aspect-[16/10] w-[690px] sm:w-[94%] md:w-auto md:h-full md:max-h-[82%] lg:w-[96%] lg:max-w-7xl lg:max-h-[85%] lg:h-auto shrink-0 md:shrink lg:shrink-0 rounded-[32px] sm:rounded-[64px] border-2 border-dashed overflow-hidden flex items-center justify-center transition-all duration-500 group/map",
             isDarkMode 
               ? "bg-slate-950 border-slate-800 shadow-[inset_0_4px_30px_rgba(0,0,0,0.5),0_40px_100px_rgba(0,0,0,0.7)]" 
               : "bg-white border-slate-200 shadow-[inset_0_4px_30px_rgba(0,0,0,0.02),0_40px_100px_rgba(0,0,0,0.05)]"
@@ -351,19 +371,92 @@ export const MapContainer: React.FC = () => {
             <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               <AnimatePresence>
                 {navigationPath && (
-                  <motion.path
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ pathLength: 1, opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 1.5, ease: "easeInOut" }}
-                    d={`M ${getPathCoords()}`}
-                    fill="none"
-                    stroke="var(--color-fecaf-green)"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="drop-shadow-[0_0_15px_rgba(0,168,89,0.5)]"
-                  />
+                  <>
+                    <motion.path
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1.5, ease: "easeInOut" }}
+                      d={`M ${getPathCoords()}`}
+                      fill="none"
+                      stroke="var(--color-fecaf-green)"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="drop-shadow-[0_0_15px_rgba(0,168,89,0.5)]"
+                    />
+
+                    {/* Floating White Arrow following the path */}
+                    {(() => {
+                      const points = getPathPoints();
+                      if (points.length < 2) return null;
+
+                      const xPoints = points.map(p => p.x);
+                      const yPoints = points.map(p => p.y);
+                      const rPoints = points.map((p, i) => {
+                        if (i < points.length - 1) {
+                          const dx = points[i+1].x - p.x;
+                          const dy = points[i+1].y - p.y;
+                          return Math.atan2(dy, dx) * 180 / Math.PI;
+                        } else {
+                          const prev = points[i-1];
+                          const dx = p.x - prev.x;
+                          const dy = p.y - prev.y;
+                          return Math.atan2(dy, dx) * 180 / Math.PI;
+                        }
+                      });
+
+                      const totalDuration = points.length * 1.2;
+
+                      return (
+                        <motion.g
+                          initial={{ opacity: 0 }}
+                          animate={{
+                            opacity: [0, 1, 1, 0],
+                            x: xPoints,
+                            y: yPoints,
+                            rotate: rPoints,
+                          }}
+                          exit={{ opacity: 0 }}
+                          transition={{
+                            opacity: {
+                              times: [0, 0.08, 0.92, 1],
+                              values: [0, 1, 1, 0],
+                              duration: totalDuration,
+                              repeat: Infinity,
+                              ease: "linear"
+                            },
+                            x: {
+                              duration: totalDuration,
+                              repeat: Infinity,
+                              ease: "linear"
+                            },
+                            y: {
+                              duration: totalDuration,
+                              repeat: Infinity,
+                              ease: "linear"
+                            },
+                            rotate: {
+                              duration: totalDuration,
+                              repeat: Infinity,
+                              ease: "linear"
+                            }
+                          }}
+                        >
+                          {/* Accent Glow Circle */}
+                          <circle r="1.6" fill="#00a859" opacity="0.3" className="animate-pulse" />
+                          {/* Inner clean paper airplane GPS marker */}
+                          <polygon 
+                            points="-1.4,-0.9 1.8,0 -1.4,0.9 -0.6,0" 
+                            fill="white" 
+                            stroke="#00a859" 
+                            strokeWidth="0.25" 
+                            className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                          />
+                        </motion.g>
+                      );
+                    })()}
+                  </>
                 )}
               </AnimatePresence>
             </svg>
@@ -444,17 +537,14 @@ export const MapContainer: React.FC = () => {
                     {node.name}
                   </div>
                   
-                  {(isDestination || isTotem) && (
+                  {isDestination && !isTotem && (
                     <motion.div 
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={cn(
-                        "mt-1 sm:mt-1.5 px-1 sm:px-2 py-0.5 rounded-full text-[5px] sm:text-[7px] font-black uppercase tracking-tighter",
-                        isTotem ? "bg-white text-fecaf-green" : "bg-fecaf-green text-white"
-                      )}
+                      className="mt-1 sm:mt-1.5 px-1 sm:px-2 py-0.5 rounded-full text-[5px] sm:text-[7px] font-black uppercase tracking-tighter bg-fecaf-green text-white"
                     >
-                      <span className="hidden sm:inline">{isTotem ? "Ponto de Partida" : "Destino Final"}</span>
-                      <span className="inline sm:hidden">{isTotem ? "Partida" : "Destino"}</span>
+                      <span className="hidden sm:inline">Destino Final</span>
+                      <span className="inline sm:hidden">Destino</span>
                     </motion.div>
                   )}
                 </div>

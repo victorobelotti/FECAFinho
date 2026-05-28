@@ -4,17 +4,17 @@ export const CAMPUS_NODES: MapNode[] = [
   // Pavimento 00 (Térreo) - Floor 0
   { id: 'ter-01', name: 'Calçada de Acesso', type: 'entrance', floor: 0, x: 15, y: 88, description: 'Área externa de acesso à unidade pela Rodovia Regis Bittencourt' },
   { id: 'ter-03', name: 'Praça de Acesso', type: 'entrance', floor: 0, x: 30, y: 88, description: 'Ponto de encontro externo e integração' },
-  { id: 'ter-10', name: 'Recepção Central', type: 'service', floor: 0, x: 50, y: 78, description: 'Atendimento ao aluno e suporte principal' },
-  { id: 'ter-12', name: 'Laboratório 01', type: 'lab', floor: 0, x: 22, y: 15, description: 'Capacidade: 56 alunos | Especializado em Software' },
-  { id: 'ter-13', name: 'Laboratório 02', type: 'lab', floor: 0, x: 50, y: 15, description: 'Capacidade: 72 alunos | Montagem e Manutenção' },
-  { id: 'ter-14', name: 'Laboratório 03', type: 'lab', floor: 0, x: 78, y: 15, description: 'Capacidade: 80 alunos | Projetos de Redes' },
+  { id: 'ter-10', name: 'Recepção Central', type: 'service', floor: 0, x: 48, y: 70, description: 'Atendimento ao aluno e suporte principal' },
+  { id: 'ter-12', name: 'Laboratório 01', type: 'lab', floor: 0, x: 22, y: 14, description: 'Capacidade: 56 alunos | Especializado em Software' },
+  { id: 'ter-13', name: 'Laboratório 02', type: 'lab', floor: 0, x: 50, y: 14, description: 'Capacidade: 72 alunos | Montagem e Manutenção' },
+  { id: 'ter-14', name: 'Laboratório 03', type: 'lab', floor: 0, x: 78, y: 14, description: 'Capacidade: 80 alunos | Projetos de Redes' },
   { id: 'ter-23', name: 'Core Escadas', type: 'stairs', floor: 0, x: 80, y: 48, description: 'Acesso às áreas de subsolo e pavimentos superiores' },
   { id: 'ter-31', name: 'Core Elevadores', type: 'elevator', floor: 0, x: 35, y: 48, description: 'Elevadores com acesso total a deficientes (PNE)' },
   { id: 'ter-54', name: 'Praça de Alimentação', type: 'service', floor: 0, x: 15, y: 65, description: 'Restaurantes e convivência social' },
-  { id: 'ter-58', name: 'Arena Multi-Usos', type: 'audit', floor: 0, x: 18, y: 30, description: 'Auditório para palestras e eventos acadêmicos' },
+  { id: 'ter-58', name: 'Arena Multi-Usos', type: 'audit', floor: 0, x: 14, y: 34, description: 'Auditório para palestras e eventos acadêmicos' },
 
   // Hidden Waypoints for Orthogonal Routing (Floor 0)
-  { id: 'w-spine-reception', x: 50, y: 78, floor: 0, isHidden: true, name: '', type: 'waypoint' },
+  { id: 'w-spine-reception', x: 50, y: 70, floor: 0, isHidden: true, name: '', type: 'waypoint' },
   { id: 'w-spine-mid', x: 50, y: 48, floor: 0, isHidden: true, name: '', type: 'waypoint' },
   { id: 'w-spine-top', x: 50, y: 30, floor: 0, isHidden: true, name: '', type: 'waypoint' },
   { id: 'w-l1-entry', x: 22, y: 30, floor: 0, isHidden: true, name: '', type: 'waypoint' },
@@ -22,7 +22,7 @@ export const CAMPUS_NODES: MapNode[] = [
   { id: 'w-elev-entry', x: 35, y: 48, floor: 0, isHidden: true, name: '', type: 'waypoint' },
   { id: 'w-stairs-entry', x: 80, y: 48, floor: 0, isHidden: true, name: '', type: 'waypoint' },
   { id: 'w-food-entry', x: 15, y: 48, floor: 0, isHidden: true, name: '', type: 'waypoint' },
-  { id: 'w-access-entry', x: 30, y: 78, floor: 0, isHidden: true, name: '', type: 'waypoint' },
+  { id: 'w-access-entry', x: 30, y: 70, floor: 0, isHidden: true, name: '', type: 'waypoint' },
 
   // Subsolo -01 - Floor 1
   { id: 'sub1-23', name: 'Escadas [S1]', type: 'stairs', floor: 1, x: 85, y: 55 },
@@ -37,7 +37,7 @@ export const CAMPUS_NODES: MapNode[] = [
   { id: 'sub2-42', name: 'Área Gamer', type: 'service', floor: 2, x: 20, y: 20, description: 'Espaço de lazer e gaming do campus' },
   { id: 'sub2-45', name: 'Sala 10', type: 'room', floor: 2, x: 50, y: 20, description: 'Capacidade: 60 alunos' },
   { id: 'sub2-53', name: 'Estacionamento', type: 'service', floor: 2, x: 50, y: 85, description: 'Acesso privativo e vagas rotativas' },
-  { id: 'totem-base', name: 'Ponto de Partida', type: 'service', floor: 0, x: 60, y: 92, description: 'Totem de Atendimento UniFECAF' },
+  { id: 'totem-base', name: 'Ponto de Partida', type: 'service', floor: 0, x: 68, y: 92, description: 'Totem de Atendimento UniFECAF' },
 ];
 
 export const CAMPUS_EDGES: MapEdge[] = [
