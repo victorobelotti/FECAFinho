@@ -18,6 +18,61 @@ import { AnimatedBackground } from './components/AnimatedBackground';
 
 export default function App() {
   const { view, isTotemActive, isDarkMode } = useCampusStore();
+  const [showWarning, setShowWarning] = React.useState(false);
+  const [countdown, setCountdown] = React.useState(10);
+
+  React.useEffect(() => {
+    if (!isTotemActive || view === 'admin') {
+      setShowWarning(false);
+      return;
+    }
+
+    let warningTimer: NodeJS.Timeout;
+    let countdownInterval: NodeJS.Timeout;
+
+    const resetTimer = () => {
+      setShowWarning(false);
+      setCountdown(10);
+
+      if (warningTimer) clearTimeout(warningTimer);
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      // 30 seconds of quiet inactivity followed by a 10-second warning countdown (total 40 seconds)
+      warningTimer = setTimeout(() => {
+        setShowWarning(true);
+        setCountdown(10);
+
+        let timeLeft = 10;
+        countdownInterval = setInterval(() => {
+          timeLeft -= 1;
+          setCountdown(timeLeft);
+          if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            useCampusStore.getState().deactivateTotem();
+          }
+        }, 1000);
+      }, 30000);
+    };
+
+    resetTimer();
+
+    const events = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart', 'click'];
+    const handleActivity = () => {
+      resetTimer();
+    };
+
+    events.forEach(event => {
+      window.addEventListener(event, handleActivity, { passive: true });
+    });
+
+    return () => {
+      if (warningTimer) clearTimeout(warningTimer);
+      if (countdownInterval) clearInterval(countdownInterval);
+      events.forEach(event => {
+        window.removeEventListener(event, handleActivity);
+      });
+    };
+  }, [isTotemActive, view]);
 
   if (!isTotemActive && view === 'welcome') {
     return <WelcomeScreen />;
@@ -112,6 +167,48 @@ export default function App() {
         </AnimatePresence>
       </main>
       </div>
+
+      {/* Elegant Warning Overlay for Inactivity */}
+      <AnimatePresence>
+        {showWarning && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50 transition-colors duration-300"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-slate-900 border border-slate-800 text-slate-100 p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl relative overflow-hidden"
+            >
+              {/* Pulsing ring around countdown number */}
+              <div className="w-24 h-24 mx-auto rounded-full border-4 border-fecaf-green/30 flex items-center justify-center mb-6 relative">
+                <div className="absolute inset-0 rounded-full border-4 border-fecaf-green border-t-transparent animate-spin" />
+                <span className="text-3xl font-black text-fecaf-green font-mono">{countdown}</span>
+              </div>
+              
+              <h3 className="text-xl font-black tracking-tight mb-2 uppercase italic text-white font-sans">Você ainda está aí?</h3>
+              <p className="text-slate-400 text-sm font-medium mb-6 font-sans">
+                O totem será reiniciado após o término do cronômetro devido à inatividade.
+              </p>
+              
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setShowWarning(false);
+                  setCountdown(10);
+                }}
+                className="w-full bg-fecaf-green hover:bg-[#008f4c] text-white py-4 px-6 rounded-2xl font-black tracking-wider uppercase transition-colors text-sm shadow-md cursor-pointer shadow-fecaf-green/20 font-sans"
+              >
+                Continuar usando
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
