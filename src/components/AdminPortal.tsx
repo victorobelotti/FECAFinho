@@ -67,7 +67,13 @@ export const AdminPortal: React.FC = () => {
   const [usersList, setUsersList] = useState<AdminUser[]>(() => {
     try {
       const saved = localStorage.getItem('FECAF_ADMIN_USERS');
-      return saved ? JSON.parse(saved) : INITIAL_USERS;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      }
+      return INITIAL_USERS;
     } catch (e) {
       console.error('Error loading users from localStorage:', e);
       return INITIAL_USERS;
@@ -77,7 +83,13 @@ export const AdminPortal: React.FC = () => {
   const [mapsList, setMapsList] = useState<MapInfo[]>(() => {
     try {
       const saved = localStorage.getItem('FECAF_ADMIN_MAPS');
-      return saved ? JSON.parse(saved) : INITIAL_MAPS;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      }
+      return INITIAL_MAPS;
     } catch (e) {
       console.error('Error loading maps from localStorage:', e);
       return INITIAL_MAPS;
@@ -91,7 +103,7 @@ export const AdminPortal: React.FC = () => {
     } catch (e) {
       console.error('Error saving users to localStorage:', e);
     }
-  }, [JSON.stringify(usersList)]);
+  }, [usersList]);
 
   // Persist maps to localStorage on change
   useEffect(() => {
@@ -100,7 +112,7 @@ export const AdminPortal: React.FC = () => {
     } catch (e) {
       console.error('Error saving maps to localStorage:', e);
     }
-  }, [JSON.stringify(mapsList)]);
+  }, [mapsList]);
 
   // Active drawers
   const [isUserDrawerOpen, setIsUserDrawerOpen] = useState(false);
