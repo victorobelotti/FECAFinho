@@ -16,6 +16,7 @@ export const Sidebar: React.FC = () => {
     <div className={cn(
       "w-full md:w-24 h-auto md:h-full flex flex-row md:flex-col items-center justify-between md:justify-start py-3 md:py-10 px-4 md:px-0 gap-3 md:gap-10 overflow-y-visible shadow-2xl relative z-40 transition-all duration-500 shrink-0",
       "order-last md:order-first", // Bottom navigation bar on mobile, left sidebar on desktop
+      view === 'admin' && "md:hidden lg:flex",
       isDarkMode 
         ? "bg-slate-950 border-t md:border-t-0 md:border-r border-slate-900" 
         : "bg-fecaf-blue border-t md:border-t-0 border-white/10"

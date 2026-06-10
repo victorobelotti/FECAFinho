@@ -7,7 +7,7 @@ import {
   Search, Plus, Edit, Trash2, X, Check,
   Loader2, ShieldCheck, Upload, Info,
   Layers, RefreshCcw, ChevronRight, Users, 
-  Trash, UserPlus, HelpCircle
+  Trash, UserPlus, HelpCircle, Sun, Moon, Power
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -47,6 +47,8 @@ const INITIAL_MAPS: MapInfo[] = [
 
 export const AdminPortal: React.FC = () => {
   const setView = useCampusStore((state) => state.setView);
+  const isDarkMode = useCampusStore((state) => state.isDarkMode);
+  const toggleDarkMode = useCampusStore((state) => state.toggleDarkMode);
   
   // Authentication State
   const [isLogged, setIsLogged] = useState(false);
@@ -327,9 +329,9 @@ export const AdminPortal: React.FC = () => {
         </AnimatePresence>
 
         {/* Sidebar Navigation */}
-        <div className="w-24 md:w-72 bg-[#0a0f1e] border-r border-slate-800/50 flex flex-col items-center py-10 shrink-0">
-          <div className="mb-14 px-8 w-full flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-fecaf-blue flex items-center justify-center shadow-lg shadow-fecaf-blue/20">
+        <div className="w-24 md:w-60 lg:w-72 bg-[#0a0f1e] border-r border-slate-800/50 flex flex-col items-center py-10 shrink-0 transition-all duration-300">
+          <div className="mb-14 px-4 md:px-5 lg:px-8 w-full flex items-center gap-2.5 md:gap-3 lg:gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-fecaf-blue flex items-center justify-center shadow-lg shadow-fecaf-blue/20 shrink-0">
               <ShieldCheck className="w-6 h-6 text-white" />
             </div>
             <div className="hidden md:block">
@@ -338,7 +340,7 @@ export const AdminPortal: React.FC = () => {
             </div>
           </div>
 
-          <nav className="flex-1 w-full px-4 space-y-3">
+          <nav className="flex-1 w-full px-2 md:px-3 lg:px-4 space-y-2 md:space-y-2.5 lg:space-y-3">
             {[
               { id: 'users', label: 'Usuários/Contas', icon: Users },
               { id: 'maps', label: 'Gerenciar Mapas', icon: MapIcon },
@@ -353,33 +355,33 @@ export const AdminPortal: React.FC = () => {
                   setSearchQuery('');
                 }}
                 className={cn(
-                  "w-full flex items-center gap-4 px-4 py-4 rounded-2xl transition-all group",
+                  "w-full flex items-center gap-2.5 md:gap-3 lg:gap-4 px-3 md:px-3 lg:px-4 py-3 md:py-3.5 lg:py-4 rounded-2xl transition-all group",
                   activeTab === item.id 
                     ? "bg-[#7c3aed]/10 text-[#a78bfa] shadow-[0_0_20px_rgba(124,58,237,0.05)] border border-[#7c3aed]/20" 
                     : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
                 )}
               >
-                <item.icon className={cn("w-6 h-6", activeTab === item.id ? "drop-shadow-[0_0_8px_rgba(167,139,250,0.5)]" : "")} />
-                <span className="hidden md:block font-black text-[11px] uppercase tracking-widest leading-none mt-0.5">{item.label}</span>
+                <item.icon className={cn("w-5 h-5 md:w-5 md:h-5 lg:w-6 lg:h-6 shrink-0", activeTab === item.id ? "drop-shadow-[0_0_8px_rgba(167,139,250,0.5)]" : "")} />
+                <span className="hidden md:block font-black text-[10px] lg:text-[11px] uppercase tracking-widest leading-none mt-0.5">{item.label}</span>
               </button>
             ))}
           </nav>
 
-          <div className="mt-auto px-4 w-full">
-            <div className="p-4 bg-slate-900/40 rounded-[24px] border border-slate-800/50 mb-4 hidden md:block">
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Core de IA</p>
+          <div className="mt-auto px-2 md:px-3 lg:px-4 w-full">
+            <div className="p-3 md:p-3 lg:p-4 bg-slate-900/40 rounded-[24px] border border-slate-800/50 mb-3 md:mb-3 lg:mb-4 hidden md:block">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 lg:mb-3">Core de IA</p>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-fecaf-green animate-pulse" />
-                <span className="text-white font-bold text-xs">V3.5 Gemini Ativo</span>
+                <div className="w-2 h-2 rounded-full bg-fecaf-green animate-pulse shrink-0" />
+                <span className="text-white font-bold text-[11px] lg:text-xs">V3.5 Gemini Ativo</span>
               </div>
             </div>
             
             <button 
               onClick={() => setView('welcome')}
-              className="flex items-center gap-2 px-8 py-5 text-slate-600 hover:text-white transition-all w-full"
+              className="flex items-center gap-2 px-4 md:px-4 lg:px-8 py-4 lg:py-5 text-slate-600 hover:text-white transition-all w-full"
             >
-              <Home className="w-6 h-6" />
-              <span className="hidden md:block font-black text-[11px] uppercase tracking-widest mt-0.5">Mapa Geral</span>
+              <Home className="w-5 h-5 lg:w-6 lg:h-6 shrink-0" />
+              <span className="hidden md:block font-black text-[10px] lg:text-[11px] uppercase tracking-widest mt-0.5">Mapa Geral</span>
             </button>
           </div>
         </div>
@@ -388,10 +390,10 @@ export const AdminPortal: React.FC = () => {
         <main className="flex-1 relative flex flex-col min-w-0">
           
           {/* Dashboard Header Bar */}
-          <header className="h-24 px-10 flex items-center justify-between border-b border-slate-800/50 bg-[#020617]/50 backdrop-blur-md z-10 shrink-0">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-4 group cursor-pointer">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#7c3aed] to-slate-800 flex items-center justify-center border border-slate-700 group-hover:border-fecaf-blue transition-all font-black text-xs text-white">
+          <header className="h-24 px-4 md:px-6 lg:px-10 flex items-center justify-between border-b border-slate-800/50 bg-[#020617]/50 backdrop-blur-md z-10 shrink-0">
+            <div className="flex items-center gap-4 md:gap-8">
+              <div className="flex items-center gap-3 md:gap-4 group cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#7c3aed] to-slate-800 flex items-center justify-center border border-slate-700 group-hover:border-fecaf-blue transition-all font-black text-xs text-white shrink-0">
                   {loggedUser ? loggedUser.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() : 'AD'}
                 </div>
                 <div className="flex flex-col">
@@ -399,7 +401,7 @@ export const AdminPortal: React.FC = () => {
                     {loggedUser ? loggedUser.name.split(' ')[0] : 'ADMIN'}
                   </span>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-fecaf-green" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-fecaf-green shrink-0" />
                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest font-sans">
                       {loggedUser ? (loggedUser.role === 'Admin' ? 'Admin Master' : loggedUser.role) : 'Membro'}
                     </span>
@@ -407,20 +409,39 @@ export const AdminPortal: React.FC = () => {
                 </div>
               </div>
 
-              <div className="h-6 w-px bg-slate-800 hidden md:block" />
+              <div className="h-6 w-px bg-slate-800 hidden lg:block" />
 
-              <h1 className="hidden md:block text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] italic mb-[-2px]">
+              <h1 className="hidden lg:block text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] italic mb-[-2px]">
                 {activeTab === 'users' ? 'Painel de Gerenciamento de Usuários' : 'Sistemas Avançados do Totem'}
               </h1>
             </div>
             
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-3 lg:gap-8">
+              {/* Tablet Toolbar: Displays only between 768px (md) and 1024px (lg) */}
+              <button
+                type="button"
+                onClick={toggleDarkMode}
+                className="hidden md:flex lg:hidden p-3 rounded-xl bg-white/5 border border-white/10 text-[#a78bfa] hover:text-white hover:bg-white/10 transition-all items-center justify-center cursor-pointer shrink-0"
+                title="Alternar Tema"
+              >
+                {isDarkMode ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-indigo-400" />}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setView('welcome')}
+                className="hidden md:flex lg:hidden p-3 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all items-center justify-center cursor-pointer shrink-0"
+                title="Voltar ao Totem"
+              >
+                <Home className="w-5 h-5" />
+              </button>
+
               <button 
                 onClick={() => {
                   setIsLogged(false);
                   setLoggedUser(null);
                 }}
-                className="bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 hover:text-white px-8 py-3 rounded-xl font-black text-[9px] uppercase tracking-[0.3em] transition-all"
+                className="bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 hover:text-white px-5 lg:px-8 py-3 rounded-xl font-black text-[9px] uppercase tracking-[0.3em] transition-all shrink-0"
               >
                 Encerrar Sessão
               </button>
@@ -429,10 +450,10 @@ export const AdminPortal: React.FC = () => {
 
           {/* Tab Content Panels */}
           {activeTab === 'users' && (
-            <div className="flex-1 flex flex-col min-h-0 p-12 overflow-y-auto custom-scrollbar">
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div className="flex-1 flex flex-col min-h-0 p-6 md:p-6 lg:p-12 overflow-y-auto custom-scrollbar">
+              <div className="flex flex-col md:flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
                 <div>
-                  <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none mb-3">Usuários Cadastrados</h2>
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase italic leading-none mb-3">Usuários Cadastrados</h2>
                   <p className="text-slate-500 text-xs font-bold">
                     Painel para controle e cadastro de e-mails institucionais com acessos liberados no ecossistema do FECAFinho.
                   </p>
@@ -447,7 +468,7 @@ export const AdminPortal: React.FC = () => {
                       placeholder="Buscar por nome, RA ou e-mail..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="bg-slate-900/80 border border-slate-800 rounded-xl py-3 pl-11 pr-6 text-sm text-white focus:border-[#7c3aed] transition-all w-72"
+                      className="bg-slate-900/80 border border-slate-800 rounded-xl py-3 pl-11 pr-6 text-sm text-white focus:border-[#7c3aed] transition-all w-full sm:w-72 md:w-64 lg:w-72"
                     />
                   </div>
 
@@ -472,8 +493,8 @@ export const AdminPortal: React.FC = () => {
               </div>
 
               {/* Data Grid (Master View) */}
-              <div className="bg-[#0a0f1e]/40 border border-slate-800/40 rounded-[32px] overflow-hidden backdrop-blur-sm shadow-2xl">
-                <table className="w-full text-left border-collapse">
+              <div className="bg-[#0a0f1e]/40 border border-slate-800/40 rounded-[32px] overflow-x-auto custom-scrollbar backdrop-blur-sm shadow-2xl">
+                <table className="w-full min-w-[750px] text-left border-collapse">
                   <thead>
                     <tr className="border-b border-slate-800/40 bg-slate-950/20">
                       <th className="px-8 py-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Nome Completo</th>
@@ -567,10 +588,10 @@ export const AdminPortal: React.FC = () => {
           )}
 
           {activeTab === 'maps' && (
-            <div className="flex-1 overflow-y-auto p-12 custom-scrollbar">
-              <div className="flex justify-between items-end mb-10">
+            <div className="flex-1 overflow-y-auto p-6 md:p-6 lg:p-12 custom-scrollbar">
+              <div className="flex flex-col gap-6 md:flex-col md:items-start lg:flex-row lg:items-end lg:justify-between mb-10">
                 <div>
-                  <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none mb-4">Gerenciar Mapas</h2>
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase italic leading-none mb-4">Gerenciar Mapas</h2>
                   <p className="text-slate-500 text-xs font-bold flex items-center gap-2">
                     <Layers className="w-4 h-4" /> 
                     Total de {mapsList.length} malhas de caminhos ativas sincronizadas com os totens UniFECAF.
@@ -579,19 +600,19 @@ export const AdminPortal: React.FC = () => {
 
                 <button 
                   onClick={() => setIsMapDrawerOpen(true)}
-                  className="bg-[#7c3aed] hover:bg-[#6d28d9] text-white px-8 py-4 rounded-xl font-black text-[11px] uppercase tracking-widest flex items-center gap-3 shadow-2xl shadow-purple-500/20 transition-all active:scale-95"
+                  className="bg-[#7c3aed] hover:bg-[#6d28d9] text-white px-8 py-4 rounded-xl font-black text-[11px] uppercase tracking-widest flex items-center gap-3 shadow-2xl shadow-purple-500/20 transition-all active:scale-95 shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                   Atualizar Novo Mapa
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
                 {mapsList.map((map) => (
                   <motion.div 
                     key={map.id}
                     whileHover={{ y: -8 }}
-                    className="bg-[#0a0f1e]/40 border border-slate-800/50 rounded-[32px] p-8 flex flex-col group transition-all hover:bg-[#0a0f1e]/60 hover:border-slate-700 backdrop-blur-sm"
+                    className="bg-[#0a0f1e]/40 border border-slate-800/50 rounded-[32px] p-6 lg:p-8 flex flex-col group transition-all hover:bg-[#0a0f1e]/60 hover:border-slate-700 backdrop-blur-sm"
                   >
                     <div className="aspect-video w-full bg-[#020617] rounded-3xl relative overflow-hidden mb-8 border border-white/5 shadow-inner">
                       <div className="absolute inset-0 opacity-[0.03] bg-pattern" />
@@ -600,20 +621,20 @@ export const AdminPortal: React.FC = () => {
                       </div>
                       <div className="absolute top-4 right-4 capitalize">
                         <span className={cn(
-                          "px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider",
-                          map.status === 'Sincronizado' ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                           "px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider",
+                           map.status === 'Sincronizado' ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                         )}>
                           {map.status}
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex justify-between items-start mb-6">
+                    <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row justify-between items-start md:items-start lg:items-start gap-4 mb-6">
                       <div>
                         <h4 className="text-xl font-black text-white tracking-tight italic mb-1">{map.name}</h4>
                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Versão: {map.version}</p>
                       </div>
-                      <div className="text-right">
+                      <div className="text-left md:text-left lg:text-right shrink-0">
                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Última Modif.</p>
                         <p className="text-xs font-bold text-slate-300">{map.lastModified}</p>
                       </div>
@@ -638,7 +659,7 @@ export const AdminPortal: React.FC = () => {
           )}
 
           {activeTab === 'totems' && (
-            <div className="flex-1 overflow-y-auto p-12 custom-scrollbar space-y-10">
+            <div className="flex-1 overflow-y-auto p-6 md:p-6 lg:p-12 custom-scrollbar space-y-10">
               <div>
                 <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none mb-3">Status dos Totens</h2>
                 <p className="text-slate-500 text-xs font-bold">Unidades de Hardware físicas registradas e operando nas recepções da faculdade.</p>
@@ -674,7 +695,7 @@ export const AdminPortal: React.FC = () => {
           )}
 
           {activeTab === 'logs' && (
-            <div className="flex-1 overflow-y-auto p-12 custom-scrollbar space-y-10">
+            <div className="flex-1 overflow-y-auto p-6 md:p-6 lg:p-12 custom-scrollbar space-y-10">
               <div>
                 <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none mb-3">Logs & Feedback</h2>
                 <p className="text-slate-500 text-xs font-bold">Relatório das pesquisas por voz de usuários reais em tempo de execução nos totens.</p>
@@ -702,7 +723,7 @@ export const AdminPortal: React.FC = () => {
           )}
 
           {activeTab === 'ai' && (
-            <div className="flex-1 overflow-y-auto p-12 custom-scrollbar space-y-10">
+            <div className="flex-1 overflow-y-auto p-6 md:p-6 lg:p-12 custom-scrollbar space-y-10">
               <div>
                 <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none mb-3">Configurações de IA</h2>
                 <p className="text-slate-500 text-xs font-bold">Ajustes finos do mascote inteligente FECAFinho alimentado pelo Gemini.</p>
