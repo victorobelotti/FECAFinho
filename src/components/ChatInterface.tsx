@@ -90,9 +90,7 @@ export const ChatInterface: React.FC = () => {
       };
 
       const normalizedInput = normalizeText(userMsg);
-      let targetId = '';
-
-      // Check category keywords
+      let targetId = '';      // Check category keywords
       const isLab = /\blabs?\b|\blaboratorio\b/i.test(normalizedInput);
       const isSala = /\bsalas?\b/i.test(normalizedInput);
       const isGamer = /\bgamer\b|\bgames?\b|\bjogos\b/i.test(normalizedInput);
@@ -100,15 +98,18 @@ export const ChatInterface: React.FC = () => {
       const isArena = /\barena\b|\bauditorio\b/i.test(normalizedInput);
       const isPraca = /\bpraca\b|\balimentacao\b|\bcomida\b|\bfood\b/i.test(normalizedInput);
       const isEstacionamento = /\bestacionamento\b|\bgaragem\b/i.test(normalizedInput);
+      const isPc = /\bcomputador\b|\bcomputadores\b|\bpc\b|\bpcs\b|\bmaquina\b|\bmaquinas\b|\binformatica\b/i.test(normalizedInput);
 
       // Extract numbers to match specific rooms/labs
       const numbers = normalizedInput.match(/\d+/g);
       const num = numbers ? parseInt(numbers[0], 10) : null;
 
-      if (isLab && num !== null) {
+      if ((isLab || isPc) && num !== null) {
         if (num === 1) targetId = 'ter-12';
         else if (num === 2) targetId = 'ter-13';
         else if (num === 3) targetId = 'ter-14';
+      } else if (isPc && num === null) {
+        targetId = 'ter-12'; // Default to Lab 1
       } else if (isSala && num !== null) {
         if (num === 6) targetId = 'sub1-33';
         else if (num === 7) targetId = 'sub1-34';
@@ -162,14 +163,21 @@ export const ChatInterface: React.FC = () => {
           const path = findPath('totem-base', targetId);
           setNavigationPath(path);
           
-          setMessages(prev => [...prev, { role: 'bot', text: `Com certeza! Tracei a melhor rota para o ${targetNode.name} no nível ${targetNode.floor === 0 ? 'Térreo' : 'S' + targetNode.floor}. Siga as linhas verdes no mapa!` }]);
+          let botText = `Com certeza! Tracei a melhor rota para o ${targetNode.name} no nível ${targetNode.floor === 0 ? 'Térreo' : 'S' + targetNode.floor}. Siga as linhas verdes no mapa!`;
+          if (isPc && num === null) {
+            botText = `Claro! Temos os Laboratórios de Informática 01, 02 e 03 equipados com computadores no Pavimento Térreo. Tracei a rota para o Laboratório 01! Siga as linhas verdes no mapa.`;
+          } else if (isPc && num !== null) {
+            botText = `Com certeza! Temos computadores disponíveis no Laboratório 0${num} no Pavimento Térreo. Tracei a rota para ele! Siga as linhas verdes no mapa.`;
+          }
+          
+          setMessages(prev => [...prev, { role: 'bot', text: botText }]);
           setIsTyping(false);
           return;
         }
       }
       
       // Local semantic match simulator (Generic fallback)
-      const hasRoomKeyword = /\bsalas?\b|\blaboratorios?\b|\blabs?\b|\bonde\b/i.test(normalizedInput);
+      const hasRoomKeyword = /\bsalas?\b|\blaboratorios?\b|\blabs?\b/i.test(normalizedInput);
       if (hasRoomKeyword) {
         await new Promise(r => setTimeout(r, 800)); 
         setMessages(prev => [...prev, { role: 'bot', text: 'Eu reconheci que você procura uma sala ou laboratório, mas não entendi qual número. Por favor, especifique como "Sala 10" ou "Laboratório 3", ou selecione no painel lateral!' }]);
